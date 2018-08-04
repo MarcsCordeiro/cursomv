@@ -13,6 +13,7 @@ import com.marcos.cursomv.domain.Cidade;
 import com.marcos.cursomv.domain.Cliente;
 import com.marcos.cursomv.domain.Endereco;
 import com.marcos.cursomv.domain.Estado;
+import com.marcos.cursomv.domain.ItemPedido;
 import com.marcos.cursomv.domain.Pagamento;
 import com.marcos.cursomv.domain.PagamentoComBoleto;
 import com.marcos.cursomv.domain.PagamentoComCartao;
@@ -25,6 +26,7 @@ import com.marcos.cursomv.repositories.CidadeRepository;
 import com.marcos.cursomv.repositories.ClienteRepository;
 import com.marcos.cursomv.repositories.EnderecoRepository;
 import com.marcos.cursomv.repositories.EstadoRepository;
+import com.marcos.cursomv.repositories.ItemPedidoRepository;
 import com.marcos.cursomv.repositories.PagamentoRepository;
 import com.marcos.cursomv.repositories.PedidoRepository;
 import com.marcos.cursomv.repositories.ProdutoRepository;
@@ -48,6 +50,8 @@ public class CursomvApplication implements CommandLineRunner {
 	private PedidoRepository pedidoRepository;
 	@Autowired
 	private PagamentoRepository pagamentoRepository;
+	@Autowired
+	private ItemPedidoRepository itemPedidoRepository;
 	
 	public static void main(String[] args) {
 		SpringApplication.run(CursomvApplication.class, args);
@@ -111,5 +115,18 @@ public class CursomvApplication implements CommandLineRunner {
 		
 		pedidoRepository.saveAll(Arrays.asList(ped1, ped2));
 		pagamentoRepository.saveAll(Arrays.asList(pagto1, pagto2));
+		
+		ItemPedido ip1 = new ItemPedido(ped1, p1, 0.00, 1, 2000.00);
+		ItemPedido ip2 = new ItemPedido(ped1, p3, 0.00, 2, 80.00);
+		ItemPedido ip3 = new ItemPedido(ped2, p2, 100.00, 1, 800.00);
+		
+		ped1.getItens().addAll(Arrays.asList(ip1, ip2));
+		ped2.getItens().addAll(Arrays.asList(ip3));
+		
+		p1.getItens().addAll(Arrays.asList(ip1));
+		p2.getItens().addAll(Arrays.asList(ip3));
+		p3.getItens().addAll(Arrays.asList(ip2));
+		
+		itemPedidoRepository.saveAll(Arrays.asList(ip1, ip2,ip3));
 	}
 }
